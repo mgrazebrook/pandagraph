@@ -8,7 +8,8 @@ We include a demo, a AngularJS application which uses the GraphQL to create seve
 
 ## Setting up Python
 
-1. Download the current version of Python.
+Download the current version of Python if you don't have a recent version (3.7+?)
+
 ```shell
 # Check you're running the right version:
 python --version
@@ -21,7 +22,7 @@ python -m venv .venv
 
 pip install -r requirements.txt
 
-# Run the tests (optional)
+# Run the tests (optional). Using pytest directly may result in it running in another environment.
 python -m pytest --cov
 
 ```

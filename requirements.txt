@@ -1,3 +1,6 @@
+flask-graphql>=2.0.1 
+graphene
+flask
 pandas
 
 # development

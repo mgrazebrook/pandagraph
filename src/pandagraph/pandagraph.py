@@ -1,8 +1,10 @@
+import graphene
+
 
 def py_to_graphql_type(sample_value):
     return {
-        str: 'String',
-        int: 'Int',
+        str: graphene.String(),
+        int: graphene.Int(),
     }[sample_value.__class__]
 
 
@@ -15,8 +17,9 @@ def pandas_to_graphql_type(dtype_name, example=None):
     :return:
     """
     return {
-        'object': 'String',
-        'int64': 'Int',
+        'object': graphene.String(),
+        'int64': graphene.Int(),
+        'float64': graphene.Float(),
     }[dtype_name]
 
 
@@ -53,3 +56,23 @@ class Pandagraph:
             for name, sample_value
             in self.kwargs.items()
         }
+
+    @property
+    def comment(self):
+        return self.dataframe_function.__doc__.strip()
+
+    def schema(self):
+        """
+        Build the GraphQL schema: one type and one query.
+
+        :return: graphene.Schema
+        """
+        object_type = type(self.type, (graphene.ObjectType,), self.columns)
+
+        # TODO: Can I introspect default params? For now, parameters are optional.
+        #  but they should really only be optional if the dataframe function has default params.
+        #  e.g. graphene.Int(required=True)
+        query_attributes = {self.type: graphene.Field(object_type, **self.query_args)}
+        query = type(self.type + 'Query', (graphene.ObjectType,), query_attributes)
+
+        return graphene.Schema(query=query)
