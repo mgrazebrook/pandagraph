@@ -22,5 +22,6 @@ python -m venv .venv
 pip install -r requirements.txt
 
 # Run the tests (optional)
-pytest --cov
+python -m pytest --cov
+
 ```

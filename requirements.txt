@@ -1,3 +1,6 @@
 pandas
-pytest-cov
 
+# development
+pytest
+pytest-cov
+-e .
