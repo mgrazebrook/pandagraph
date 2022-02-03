@@ -1,10 +1,12 @@
 import graphene
+from datetime import datetime
 
 
 def py_to_graphql_type(sample_value):
     return {
         str: graphene.String(),
         int: graphene.Int(),
+        datetime: graphene.DateTime(),
     }[sample_value.__class__]
 
 
@@ -20,6 +22,7 @@ def pandas_to_graphql_type(dtype_name, example=None):
         'object': graphene.String(),
         'int64': graphene.Int(),
         'float64': graphene.Float(),
+        'datetime64[ns]': graphene.DateTime(),  # TODO: "Invalid comparison between dtype=datetime64[ns] and datetime"
     }[dtype_name]
 
 
@@ -59,6 +62,8 @@ class Pandagraph:
 
     @property
     def comment(self):
+        if self.dataframe_function.__doc__ is None:
+            return ''
         return self.dataframe_function.__doc__.strip()
 
     # def _query_resolver(self, parent, info, **args):
@@ -90,6 +95,6 @@ class Pandagraph:
             # A resolver is automatically a static method: no access to self
             "resolve_rows": lambda parent, info, **kwargs: self.dataframe_function(**kwargs).itertuples()
         }
-        query = type(self.type + 'Query', (graphene.ObjectType,), query_attributes)
+        query = type('Query', (graphene.ObjectType,), query_attributes)
 
         return graphene.Schema(query=query)
