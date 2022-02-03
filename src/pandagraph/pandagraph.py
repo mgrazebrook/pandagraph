@@ -61,6 +61,12 @@ class Pandagraph:
     def comment(self):
         return self.dataframe_function.__doc__.strip()
 
+    # def _query_resolver(self, parent, info, **args):
+    #     # May not work: 'Graphene executes this as a staticmethod implicitly'
+    #     # https://docs.graphene-python.org/en/latest/types/objecttypes/
+    #     df = self.dataframe_function(**args)
+    #     return df.itertuples()
+
     def schema(self):
         """
         Build the GraphQL schema: one type and one query.
@@ -72,7 +78,18 @@ class Pandagraph:
         # TODO: Can I introspect default params? For now, parameters are optional.
         #  but they should really only be optional if the dataframe function has default params.
         #  e.g. graphene.Int(required=True)
-        query_attributes = {self.type: graphene.Field(object_type, **self.query_args)}
+
+        # TODO: , **self.query_args
+
+        query_attributes = {
+            "rows": graphene.List(
+                graphene.NonNull(object_type),
+                description=self.comment,
+                args=self.query_args,
+            ),
+            # A resolver is automatically a static method: no access to self
+            "resolve_rows": lambda parent, info, **kwargs: self.dataframe_function(**kwargs).itertuples()
+        }
         query = type(self.type + 'Query', (graphene.ObjectType,), query_attributes)
 
         return graphene.Schema(query=query)

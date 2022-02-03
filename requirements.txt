@@ -1,5 +1,6 @@
-flask-graphql>=2.0.1 
-graphene
+# flask-graphql>=2.0.1 
+graphql-server[flask]
+graphene>=3.0
 flask
 pandas
 

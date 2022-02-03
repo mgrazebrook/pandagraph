@@ -3,7 +3,7 @@ import pandas as pd
 import graphene
 from pandagraph import Pandagraph
 from flask import Flask
-from flask_graphql import GraphQLView
+from graphql_server.flask import GraphQLView
 
 
 def ages_df(min_age=18, max_age=70):
