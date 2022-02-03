@@ -1,19 +1,11 @@
-from flask import Flask
-from graphql_server.flask import GraphQLView
 from pandagraph import Pandagraph
-from datetime import datetime
-
 from test_data import StoreData
 
-app = Flask(__name__)
+Pandagraph(
+    # StoreData.get_store_data(from_date: int, to_date: int) -> pd.DataFrame
+    StoreData(50000, 30).get_store_data,
 
-schema = Pandagraph(StoreData(50000, 30).get_store_data, from_date=20190101, to_date=20190601).schema()
-
-app.add_url_rule('/graphql', view_func=GraphQLView.as_view(
-    'graphql',
-    schema=schema.graphql_schema,
-    graphiql=True,
-    graphql_version='1.2.0',
-))
-
-app.run()
+    # Sample parameters so we can get a tiny dataframe to examine
+    from_date=20190101,
+    to_date=20190601
+).run()  # Run is a separate call because one may prefer to 'syndicate' the schema, i.e. make it part of a bigger one.

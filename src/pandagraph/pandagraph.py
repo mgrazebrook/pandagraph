@@ -1,5 +1,10 @@
 import graphene
 from datetime import datetime
+from flask import Flask
+from graphql_server.flask import GraphQLView
+
+
+app = Flask(__name__)
 
 
 def py_to_graphql_type(sample_value):
@@ -98,3 +103,13 @@ class Pandagraph:
         query = type('Query', (graphene.ObjectType,), query_attributes)
 
         return graphene.Schema(query=query)
+
+    def run(self):
+        app.add_url_rule('/graphql', view_func=GraphQLView.as_view(
+            'graphql',
+            schema=self.schema().graphql_schema,
+            graphiql=True,
+            graphql_version='1.2.0',
+        ))
+
+        app.run()
