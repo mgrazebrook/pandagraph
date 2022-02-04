@@ -3,6 +3,7 @@ graphql-server[flask]
 graphene>=3.0
 flask
 pandas
+flask-cors
 
 # development
 pytest
