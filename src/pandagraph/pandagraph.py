@@ -2,9 +2,12 @@ import graphene
 from datetime import datetime
 from flask import Flask
 from graphql_server.flask import GraphQLView
-
+from flask_cors import CORS
 
 app = Flask(__name__)
+# app.config['CORS_HEADERS'] = 'Content-Type'
+# cors = CORS(app, resources={'/graphql': '"http://127.0.0.1:4200"'})
+CORS(app)
 
 
 def py_to_graphql_type(sample_value):
@@ -115,6 +118,7 @@ class Pandagraph:
             schema=self.schema().graphql_schema,
             graphiql=True,
             graphql_version='1.2.0',
+            headers='Access-Control-Allow-Origin: *'
         ))
 
         app.run()
