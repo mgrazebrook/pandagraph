@@ -116,7 +116,7 @@ class Pandagraph:
             'graphql',
             schema=self.schema().graphql_schema,
             graphiql=True,
-            graphql_version='1.2.0'
+            graphql_version='1.2.0',
         ))
 
         app.run()
