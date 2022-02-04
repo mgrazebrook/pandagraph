@@ -3,8 +3,10 @@ from datetime import datetime
 from flask import Flask
 from graphql_server.flask import GraphQLView
 
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app, support_credentials=True)
 
 
 def py_to_graphql_type(sample_value):
@@ -114,7 +116,7 @@ class Pandagraph:
             'graphql',
             schema=self.schema().graphql_schema,
             graphiql=True,
-            graphql_version='1.2.0',
+            graphql_version='1.2.0'
         ))
 
         app.run()
