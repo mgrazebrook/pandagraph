@@ -91,14 +91,19 @@ class Pandagraph:
 
         # TODO: , **self.query_args
 
+        resolver_name = "resolve_" + self.type
+
+        def resolver_fn(parent, info, **kwargs):
+            return self.dataframe_function(**kwargs).itertuples()
+
         query_attributes = {
-            "rows": graphene.List(
+            self.type: graphene.List(
                 graphene.NonNull(object_type),
                 description=self.comment,
                 args=self.query_args,
             ),
             # A resolver is automatically a static method: no access to self
-            "resolve_rows": lambda parent, info, **kwargs: self.dataframe_function(**kwargs).itertuples()
+            resolver_name: resolver_fn
         }
         query = type('Query', (graphene.ObjectType,), query_attributes)
 

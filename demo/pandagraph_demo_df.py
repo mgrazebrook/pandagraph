@@ -27,7 +27,7 @@ def make_monthly_data(revenue, employees):
     return ret
 
 
-class StoreData:
+class PandGraphDemoDf:
     """
     The dataframe function can be a method, this lets you
     initialise the class with inputs which aren't from
@@ -37,12 +37,17 @@ class StoreData:
         data = make_monthly_data(revenue, employees)
         self.df = pd.DataFrame(data)
 
-    def get_store_data(self, from_date, to_date):
+    def get_pandagraph_demo_df(self, from_date, to_date):
         """
-        Fake store data
+        PandaGraph demo - fake business data
+
+        This is randomly generated. PanaGraph introspects a callable: function, __call__ or method.
+
+        I'm using a class: the class constructor has information to generate a dataframe.
+        Perhaps a database connection, hyperperameters etc. The callable has the parameters to query it.
         """
         return self.df[self.df.month.between(from_date, to_date)]
 
 
 if __name__ == '__main__':
-    store_data = StoreData(50000, 30)
+    store_data = PandGraphDemoDf(50000, 30)

@@ -1,10 +1,39 @@
 # pandagraph
-From data frame to GraphQL API in 2 lines of code
+From data frame to GraphQL API in 1 line of code (+ imports)
 
-Pandagraph is a Python library which introspects a Pandas database, uses that information to build 
-a GraphQL API and exposes it through Flask.
+Pandagraph could be used for rapidly prototying data science in a web front end or building dasboards. It turns
+a dataframe into a GraphQL API. It's designed so you can "federate" it as part of a larger GraphQL schema for
+production use.
 
-We include a demo, a AngularJS application which uses the GraphQL to create several charts in a dashboard.
+Pandagraph introspects a method returning a Pandas data frame. The function name becomes the query name; the function 
+parameters become query parameters; the column definitions become the GraphQL type.
+
+We include a [demo](https://github.com/mgrazebrook/pandagraph-web-app), a AngularJS application which uses the GraphQL to create several charts in a dashboard.
+
+This project is mostly very simple applications of a technology stack so it could also be used for learning:
+
+Pandas - Python introspection - Graphene - Flask - GraphQL - Python packaging - (and in the front end) - Angular -  PrimeNG
+
+## Example of use
+```python
+from pandagraph import Pandagraph
+from my_datascience import CleverStuff, data_sources
+
+Pandagraph(
+    # Assuming your method has a signature like this:
+    # CleverStuff.get_dataframe(query_param: str) -> pd.DataFrame
+    # 
+    # It can take a function. Here, I've shown it using a method so
+    # you can construct your class with any parameters which you need to create your dataframe
+    # The method name is the query name. Its docstring is help text.
+    CleverStuff(data_sources).get_dataframe, 
+    
+    # query_param is a stand-in for as many query parameters as you want: it's kwargs
+    # Pandagraph needs to introspect a sample dataframe when it is constructed.
+    # So you need to give it parameters which, on your function, rerurn a sample dataframe (one row is enough)
+    query_param='FilterValue',
+).run()  # Run is a separate call because one may prefer to 'syndicate' the schema, i.e. make it part of a bigger one.
+```
 
 ## Setting up Python
 
@@ -47,4 +76,6 @@ to be adapted or for learning.
 2. Ariadne - a schema first alternative for Python/GraphQL: https://ariadnegraphql.org
 
 ## TODO:
-Return a list of row objects not a single object.
+Why do my query and type have the same name?
+If a DF has a name, how can I link it to an object in a federated schema?
+Improve the README: a bit more sales pitchy at the start, notes on production use

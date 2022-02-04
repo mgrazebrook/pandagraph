@@ -1,9 +1,9 @@
 from pandagraph import Pandagraph
-from test_data import StoreData
+from pandagraph_demo_df import PandGraphDemoDf
 
 Pandagraph(
-    # StoreData.get_store_data(from_date: int, to_date: int) -> pd.DataFrame
-    StoreData(50000, 30).get_store_data,
+    # PandGraphDemoDf.get_pandagraph_demo_df(from_date: int, to_date: int) -> pd.DataFrame
+    PandGraphDemoDf(50000, 30).get_pandagraph_demo_df,
 
     # Sample parameters so we can get a tiny dataframe to examine
     from_date=20190101,
